@@ -16,21 +16,22 @@ def calc_dist(lat1, lon1, lat2, lon2):
 def get_dist(meteor):
         return meteor.get('distance',float('inf'))
 
-met_landings = requests.get('https://data.nasa.gov/resource/y77d-th95.json')
-error_list=[]
-if (met_landings.status_code==200):
-    print ('obtained_data_successfully')
-    met_lands_list = met_landings.json()
-    for met in met_lands_list:
-        if not ('reclat' in met or 'reclong' in met):
-            print('**No Lat and Long **'+str(met))
-            error_list.append(met)
-            continue
-        met['distance']= calc_dist(38.969555,-77.386098,float(met['reclat']), float(met['reclong']))
-    met_lands_list.sort(key=get_dist)
-    print(met_lands_list[0:5])
-    print ('****************')
-    print ('The locations that have no latitude and longitude are')
-    print('length is '+str(len(error_list)))
-    for met in error_list:
-        print(met)
+if __name__ == '__main__':
+    met_landings = requests.get('https://data.nasa.gov/resource/y77d-th95.json')
+    error_list=[]
+    if (met_landings.status_code==200):
+        print ('obtained_data_successfully')
+        met_lands_list = met_landings.json()
+        for met in met_lands_list:
+            if not ('reclat' in met or 'reclong' in met):
+                print('**No Lat and Long **'+str(met))
+                error_list.append(met)
+                continue
+            met['distance']= calc_dist(38.969555,-77.386098,float(met['reclat']), float(met['reclong']))
+        met_lands_list.sort(key=get_dist)
+        print(met_lands_list[0:5])
+        print ('****************')
+        print ('The locations that have no latitude and longitude are')
+        print('length '+str(len(error_list)))
+        for met in error_list:
+            print(met)
